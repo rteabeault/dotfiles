@@ -1,0 +1,35 @@
+#!/bin/bash
+
+brew bundle --no-lock --file=/dev/stdin <<Brewfile
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+
+brew "chezmoi"
+brew "ffmpeg"
+brew "jq"
+brew "neovim"
+brew "pandoc"
+brew "tmux"
+brew "tree"
+brew "yt-dlp"
+
+cask "alacritty"
+cask "calibre"
+cask "discord"
+cask "docker"
+cask "dropbox"
+cask "expressvpn"
+cask "font-meslo-lg-nerd-font"
+cask "google-chrome"
+cask "mediathekview"
+cask "mysides"
+cask "obsidian"
+cask "openaudible"
+cask "rar"
+cask "raycast"
+cask "signal"
+cask "slack"
+cask "spotify"
+cask "wezterm"
+
+Brewfile

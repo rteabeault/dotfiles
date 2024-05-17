@@ -1,0 +1,11 @@
+{{- $fullName := promptStringOnce . "fullName" "What is your full name" -}}
+{{- $email := promptStringOnce . "email" "What is your email address" -}}
+
+{{- $hostTypeChoices := list "home" "work" -}}
+{{- $hosttype := promptChoice "What type of host are you on" $hostTypeChoices -}}
+
+[data]
+  fullName = {{ $fullName | quote }}
+  email = {{ $email | quote }}
+  hosttype = {{ $hosttype | quote }}
+  

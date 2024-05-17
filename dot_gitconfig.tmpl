@@ -1,0 +1,29 @@
+[color]
+  ui = auto
+
+[credential]
+  helper =
+
+[init]
+  dexfaultBranch = main
+
+[user]
+  name = {{ .fullName }}
+
+[push]
+  autoSetupRemote = true
+
+[init]
+  defaultBranch = main
+
+[includeIf "gitdir:/Users/"]
+  path = ~/.gitconfig.d/macos.gitconfig
+
+[includeIf "gitdir:/home/"]
+  path = ~/.gitconfig.d/linux.gitconfig
+
+[include]
+  path = ~/.gitconfig.d/local.gitconfig
+
+[include]
+  path = ~/.gitconfig.d/work.gitconfig

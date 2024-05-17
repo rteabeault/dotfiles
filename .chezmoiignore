@@ -1,0 +1,18 @@
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+{{ end }}
+
+install.sh
+
+README.md
+
+.oh-my-zsh/cache/
+
+**/*.zwc
+
+# For work chezmoi is not managing these files.
+{{ if eq .hosttype "work" }}
+.gitconfig.d/work.gitconfig
+.gitconfig.d/macos.gitconfig
+.gitconfig.d/workday-user.gitconfig
+{{ end }}
