@@ -18,11 +18,19 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
+
+# Replace zsh's default completion selection menu with fzf
+# https://github.com/Aloxaf/fzf-tab
 zinit light Aloxaf/fzf-tab
 
 # Load completions
 autoload -U compinit && compinit
+zmodload -i zsh/complist
 
+# -q is for quiet; actually run all the `compdef's saved before `compinit` call
+# (`compinit' declares the `compdef' function, so it cannot be used until
+# `compinit' is ran; Zinit solves this via intercepting the `compdef'-calls and
+# storing them for later use with `zinit cdreplay')
 zinit cdreplay -q
 
 # Keybindings
@@ -44,7 +52,7 @@ setopt hist_find_no_dups
 
 # Completion styling
 # Case insensitive matching.
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-} r:|=*' '+ r:|[._-]=* l:|=*'
 
 # Set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -53,7 +61,7 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 
 # Preview directory's content with eza when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 
 # Aliases
 alias ls='ls --color'
@@ -65,6 +73,11 @@ eval "$(fzf --zsh)"
 export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix --exclude .git"
+
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
 # Use fd (https://github.com/sharkdp/fd) for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
@@ -78,6 +91,21 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+  esac
+}
+
 source ~/.local/share/fzf-git.sh/fzf-git.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -86,4 +114,3 @@ source ~/.local/share/fzf-git.sh/fzf-git.sh
 {{- if eq .hosttype "work" }}
 for filename in $(find ~/.shell.d -name '*.sh' | sort); do source $filename; done
 {{- end }}
-
