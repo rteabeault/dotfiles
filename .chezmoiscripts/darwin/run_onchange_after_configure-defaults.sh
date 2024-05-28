@@ -13,6 +13,12 @@ defaults write com.apple.dock tilesize -int 40
 # Set magnified size of dock
 defaults write com.apple.dock largesize -int 60
 
+# Auto hide doc
+defaults write com.apple.dock autohide -bool true 
+
+# Don't show recent apps in doc.
+defaults write com.apple.dock show-recents -bool false
+
 # Remove screenshot shadow
 defaults write com.apple.dock disable-shadow -bool true
 

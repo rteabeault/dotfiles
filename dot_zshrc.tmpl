@@ -75,10 +75,27 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # Aliases
-alias ls='ls --color'
+alias l='eza'
+
+# List everything, group directories first
+alias ll='l -al --icons --group --header --git --octal-permissions --group-directories-first'
+
+# Sort by modified
+alias lt=’l -al --icons --group --header --git --octal-permissions --sort=modified’
+
+# List files only.
+alias lf='l -laf --icons --group --git --octal-permissions --header'
+
+# List directories only.
+alias ld='l -laD --icons --group --git --octal-permissions --header'
+
+# List hidden files and directories.
+alias lh='l -ld .* --icons --group --git --octal-permissions --header --group-directories-first'
 
 # Shell integrations
 eval "$(fzf --zsh)"
+
+export FZF_DEFAULT_OPTS="--pointer='◆' --marker='>' --border='rounded' --color=bg+:#3B4252,bg:-1,spinner:#81A1C1,hl:#616E88,fg:#D8DEE9,header:#616E88,info:#81A1C1,pointer:#81A1C1,marker:#81A1C1,fg+:#D8DEE9,prompt:#81A1C1,hl+:#81A2C1"
 
 # Setup fzf to use fd instead of find
 export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix --exclude .git'
@@ -110,10 +127,10 @@ _fzf_comprun() {
   shift
 
   case "$command" in
-    cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
-    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
-    ssh)          fzf --preview 'dig {}'                   "$@" ;;
-    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"                           "$@" ;;
+    ssh)          fzf --preview 'dig {}'                                     "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview"                  "$@" ;;
   esac
 }
 

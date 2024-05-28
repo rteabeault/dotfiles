@@ -6,6 +6,22 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/rteabeault/dotfiles/main/install.sh)"
 ```
 
+- [ ] Signin with appleid
+- [ ] Signin Messages
+- [ ] Signin Signal
+- [ ] Signin Discord
+- [ ] Signin Slack 
+- [ ] Set keyboard shortcuts for mac
+  - [ ] Caps lock -> Ctrl
+  - [ ] Option -> Cmd
+  - [ ] Cmd -> Option
+- [ ] Arrange Displays
+- [ ] Login to Chrome
+- [ ] Login to Dropbox
+- [ ] Setup Raycast
+
+
+
 ## Chezmoi Stuff
 * [User Guide](https://www.chezmoi.io/user-guide/commanh-overview/)
 * [Reference Guide](https://www.chezmoi.io/reference/)

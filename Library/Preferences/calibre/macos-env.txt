@@ -1,0 +1,1 @@
+CALIBRE_CONFIG_DIRECTORY=~/Dropbox/Apps/Calibre
