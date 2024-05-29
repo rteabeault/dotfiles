@@ -74,7 +74,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-# Aliases
+# Eza Aliases
 alias l='eza'
 
 # List everything, group directories first
@@ -134,7 +134,12 @@ _fzf_comprun() {
   esac
 }
 
+# Fzf git
 source ~/.local/share/fzf-git.sh/fzf-git.sh
+
+# Zoxide
+eval "$(zoxide init zsh)"
+alias cd='z'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

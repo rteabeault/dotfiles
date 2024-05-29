@@ -19,8 +19,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/rteabeault/dotfiles/main/i
 - [ ] Login to Chrome
 - [ ] Login to Dropbox
 - [ ] Setup Raycast
-
-
+- [ ] Setup Rectangle
 
 ## Chezmoi Stuff
 * [User Guide](https://www.chezmoi.io/user-guide/commanh-overview/)

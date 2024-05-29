@@ -16,3 +16,11 @@ README.md
 .gitconfig.d/macos.gitconfig
 .gitconfig.d/workday-user.gitconfig
 {{ end }}
+
+# Nvim
+dot_config/nvim/tags
+dot_cofnig/nvim/test.sh
+dot_config/nvim/.luarc.json
+dot_config/nvim/nvim
+dot_config/nvin/spell/
+dot_config/nvim/lazy-lock.json
