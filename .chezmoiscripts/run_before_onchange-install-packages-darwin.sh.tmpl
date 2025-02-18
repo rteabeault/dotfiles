@@ -64,6 +64,10 @@ brew "tldr"
 # list contents of directories in a tree-like format.
 brew "tree"
 
+# curl alternative 
+# https://github.com/ducaale/xh
+# brew "xh"
+
 # a lightweight and portable command-line YAML, 
 # JSON and XML processor.
 # https://github.com/mikefarah/yq
@@ -91,7 +95,11 @@ cask "docker"
 cask "dropbox"
 cask "expressvpn"
 cask "font-meslo-lg-nerd-font"
+
+{{- if eq .hosttype "home" }}
 cask "google-chrome"
+{{- end }}
+
 cask "mediathekview"
 cask "obsidian"
 cask "openaudible"
@@ -99,9 +107,17 @@ cask "rar"
 cask "raycast"
 cask "rectangle-pro"
 cask "signal"
+
+{{- if eq .hosttype "home" }}
 cask "slack"
+{{- end }}
+
 cask "spotify"
+
+{{- if eq .hosttype "home" }}
 cask "visual-studio-code"
+{{- end }}
+
 cask "wezterm"
 
 Brewfile

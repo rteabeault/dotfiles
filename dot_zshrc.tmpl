@@ -24,7 +24,7 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Load completions
-autoload -U compinit && compinit
+autoload -U compinit && compinit -u
 zmodload -i zsh/complist
 
 # -q is for quiet; actually run all the `compdef's saved before `compinit` call
@@ -155,6 +155,9 @@ export NVM_DIR="$HOME/.nvm"
 {{- if eq .hosttype "work" }}
 for filename in $(find ~/.shell.d -name '*.sh' | sort); do source $filename; done
 {{- end }}
+
+# Add Copilot aliases.
+eval "$(gh copilot alias -- zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
