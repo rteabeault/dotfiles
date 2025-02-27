@@ -4,9 +4,11 @@ return {
     --- "marko-cerovac/material.nvim",
     "rebelot/kanagawa.nvim",
     opts = {
-      --- background = { -- :h background
-      ---   dark = "mocha",
-      --- },
+      transparent = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
     },
   },
 
