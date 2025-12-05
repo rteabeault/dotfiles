@@ -1,22 +1,33 @@
 return {
   {
-    --- "catppuccin/nvim",
-    --- "marko-cerovac/material.nvim",
     "rebelot/kanagawa.nvim",
     opts = {
       transparent = true,
+      palette = {},
       styles = {
         sidebars = "transparent",
         floats = "transparent",
+      },
+      colors = {
+        theme = {
+          all = {
+            ui = {
+              bg_gutter = "none",
+            },
+          },
+        },
       },
     },
   },
 
   {
+    "Shatur/neovim-ayu",
+  },
+
+  {
     "LazyVim/LazyVim",
     opts = {
-      --- colorscheme = "material-darker",
-      colorscheme = "kanagawa-dragon",
+      colorscheme = "ayu",
     },
   },
 }

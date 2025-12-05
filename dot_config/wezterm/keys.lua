@@ -35,6 +35,7 @@ function module.setup(config)
 			}),
 		},
 		{ mods = module.modifier_key, key = "p", action = action.ActivateCommandPalette },
+		{ mods = "ALT", key = "Enter", action = wezterm.action.DisableDefaultAssignment },
 	}
 end
 
