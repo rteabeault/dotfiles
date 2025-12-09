@@ -273,12 +273,14 @@ themes {
     white 229 233 240 // #E5E9F0
     orange 208 135 112 // #D08770
   } 
+
+
 }
 
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "nord"
+theme "ayu_dark"
 
 // The name of the default layout to load on startup
 // Default: "default"
