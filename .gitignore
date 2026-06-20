@@ -1,0 +1,9 @@
+.config/karabiner/automatic_backups/
+.config/langt/client_secret.json
+.config/langt/config.toml
+.config/op/config
+.config/raycast/extensions
+.config/rclone/rclone.conf
+
+.DS_Store
+
