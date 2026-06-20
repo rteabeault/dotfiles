@@ -1,0 +1,169 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/Users/rteabeault/.zsh/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Set zinit home, install, and source.
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Powerlevel10k prompt
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+# Zsh Plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+
+# Replace zsh's default completion selection menu with fzf
+# https://github.com/Aloxaf/fzf-tab
+zinit light Aloxaf/fzf-tab
+
+# Load completions
+autoload -U compinit && compinit
+zmodload -i zsh/complist
+
+# -q is for quiet; actually run all the `compdef's saved before `compinit` call
+# (`compinit' declares the `compdef' function, so it cannot be used until
+# `compinit' is ran; Zinit solves this via intercepting the `compdef'-calls and
+# storing them for later use with `zinit cdreplay')
+zinit cdreplay -q
+
+# Keybindings
+bindkey -e
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
+# History
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+# Completion styling
+
+# Disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+
+# Case insensitive matching.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-} r:|=*' '+ r:|[._-]=* l:|=*'
+
+# Set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+
+# Force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+
+# Preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+# Eza Aliases
+alias l='eza'
+
+# List everything, group directories first
+alias ll='l -al --icons --group --header --git --octal-permissions --group-directories-first'
+
+# Sort by modified
+alias lt=’l -al --icons --group --header --git --octal-permissions --sort=modified’
+
+# List files only.
+alias lf='l -laf --icons --group --git --octal-permissions --header'
+
+# List directories only.
+alias ld='l -laD --icons --group --git --octal-permissions --header'
+
+# List hidden files and directories.
+alias lh='l -ld .* --icons --group --git --octal-permissions --header --group-directories-first'
+
+# dot command alias for managing dot files
+alias dot='/usr/bin/git --git-dir=$HOME/.dot/ --work-tree=$HOME'
+
+# Shell integrations
+eval "$(fzf --zsh)"
+
+export FZF_DEFAULT_OPTS="--pointer='◆' --marker='>' --border='rounded' --color=bg+:#3B4252,bg:-1,spinner:#81A1C1,hl:#616E88,fg:#D8DEE9,header:#616E88,info:#81A1C1,pointer:#81A1C1,marker:#81A1C1,fg+:#D8DEE9,prompt:#81A1C1,hl+:#81A2C1"
+
+# Setup fzf to use fd instead of find
+export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix --exclude .git"
+
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"                           "$@" ;;
+    ssh)          fzf --preview 'dig {}'                                     "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview"                  "$@" ;;
+  esac
+}
+
+# Fzf git
+source ~/.local/share/fzf-git.sh/fzf-git.sh
+
+# Zoxide
+eval "$(zoxide init zsh)"
+alias cd='z'
+
+# Vim
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+alias vimdiff='nvim -d'
+export EDITOR=nvim
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Added by Windsurf
+export PATH="/Users/rteabeault/.codeium/windsurf/bin:$PATH"
