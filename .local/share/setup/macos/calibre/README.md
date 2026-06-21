@@ -1,1 +1,1 @@
-File should be placed in /Library/Preferences/calibre/macos-env.txt
+File should be placed in Library/Preferences/calibre/macos-env.txt
