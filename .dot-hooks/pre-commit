@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+# Extract the staged changes from your specific dotfiles repo and pipe to betterleaks
+if ! git --git-dir="$HOME/.dot" --work-tree="$HOME" diff --staged | betterleaks -v stdin; then
+  echo "Betterleaks detected a secret in your staged changes! Commit blocked."
+  exit 1
+fi
