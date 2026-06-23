@@ -72,3 +72,13 @@ To run the setup script
 This script determines what operating system is in use. It then executes each script in a 
 subdirectory `./local/bin/setup/macos` or `.local/bin/setup/linux`.
 
+
+## Betterleaks
+
+To enable a Betterleaks pre-commit hook run 
+
+```
+dot config --local core.hooksPath ~/.dot-hooks
+```
+
+This has to be done once after pulling the repo.

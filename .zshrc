@@ -1,10 +1,3 @@
-# OPENSPEC:START
-# OpenSpec shell completions configuration
-fpath=("/Users/rteabeault/.zsh/completions" $fpath)
-autoload -Uz compinit
-compinit
-# OPENSPEC:END
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -18,6 +11,9 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
+# zi conflicts with zoxide's zi
+zinit ice atload'unalias zi'
+
 # Powerlevel10k prompt
 #zinit ice depth=1; zinit light romkatv/powerlevel10k
 
@@ -30,9 +26,13 @@ zinit light zsh-users/zsh-autosuggestions
 # https://github.com/Aloxaf/fzf-tab
 zinit light Aloxaf/fzf-tab
 
+
 # Load completions
 autoload -U compinit && compinit
 zmodload -i zsh/complist
+
+# Include hidden files/directories in completions.
+_comp_options+=(globdots)
 
 # -q is for quiet; actually run all the `compdef's saved before `compinit` call
 # (`compinit' declares the `compdef' function, so it cannot be used until
@@ -76,6 +76,7 @@ zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' menu no
 
 # Preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:z:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 
 # switch group using `<` and `>`
@@ -149,7 +150,9 @@ source ~/.local/bin/fzf-git.sh/fzf-git.sh
 
 # Zoxide
 eval "$(zoxide init zsh)"
-alias cd='z'
+ 
+alias j="z"
+alias jj="zi"
 
 # Vim
 alias vim="nvim"
