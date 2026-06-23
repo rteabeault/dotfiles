@@ -3,7 +3,7 @@
 # https://macos-defaults.com/
 echo "Setting Mac defaults..."
 defaults write -g KeyRepeat -int 1
-defaults write -g InitialKeyRepeat -int 10
+defaults write -g InitialKeyRepeat -int 20
 
 defaults write com.apple.dock "autohide" -bool "true"
 defaults write com.apple.dock "tilesize" -int "45"
