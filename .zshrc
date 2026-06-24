@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -26,13 +28,21 @@ zinit light zsh-users/zsh-autosuggestions
 # https://github.com/Aloxaf/fzf-tab
 zinit light Aloxaf/fzf-tab
 
-
-# Load completions
-autoload -U compinit && compinit
-zmodload -i zsh/complist
-
 # Include hidden files/directories in completions.
 _comp_options+=(globdots)
+
+# Load completions
+zmodload -i zsh/complist
+autoload -Uz compinit
+setopt EXTENDED_GLOB
+# Only regenerate the dump file once per day
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C  
+fi
+unsetopt EXTENDED_GLOB
+
 
 # -q is for quiet; actually run all the `compdef's saved before `compinit` call
 # (`compinit' declares the `compdef' function, so it cannot be used until
@@ -161,7 +171,8 @@ alias v="nvim"
 alias vimdiff='nvim -d'
 export EDITOR=nvim
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# zprof
